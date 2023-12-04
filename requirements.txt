@@ -1,0 +1,8 @@
+gradio
+numpy
+trimesh
+shapely
+mapbox_earcut
+numpy_indexed
+seaborn
+rtree
