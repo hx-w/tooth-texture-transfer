@@ -139,7 +139,7 @@ class DispMap(VMap):
         # deform `pos_msh` according to `param_msh` and `dm`
         for vi in tqdm(range(pos_msh.vertices.shape[0]), desc='双线性插值优化中'):
             shift_loc = (param_msh.vertices[vi][:2] + np.array([1., 1.])) / 2.
-            real_loc = [min(99., max(0., 100. * loc)) for loc in shift_loc]
+            real_loc = [min(resol - 1, max(0., resol * loc)) for loc in shift_loc]
             
             # bilinear interplot
             ## A(floor row, floor col), B(floor row, ceil col)

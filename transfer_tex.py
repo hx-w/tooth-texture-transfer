@@ -47,26 +47,27 @@ def make_dispmap(msh: str, resol: int, cache_dir: str, tag: str) -> Tuple[dm.Dis
 
     return disp_map, png_filename
 
-def procceed(tex_mesh_path: str, smt_mesh_path: str, tex_resol: int, progress):
+#!! Important
+def procceed(tex_mesh_path: str, smt_mesh_path: str, tex_resol: int, progress=None):
     tex_mesh = trimesh.load(tex_mesh_path)
     smt_mesh = trimesh.load(smt_mesh_path)
 
     cache_dir, tag, cached = hash_cache(tex_mesh)
     
     ## step - 1 registration
-    progress(0, desc='正在对齐网格')
-    tex_mesh = registration(tex_mesh, g_base_mesh)
-    smt_mesh = registration(smt_mesh, g_base_mesh)
+    # progress(0, desc='正在对齐网格')
+    # tex_mesh = registration(tex_mesh, g_base_mesh)
+    # smt_mesh = registration(smt_mesh, g_base_mesh)
     
     ## step - 2 compute disp map
-    progress(0, desc='正在计算移位贴图')
+    # progress(0, desc='正在计算移位贴图')
     try:
         disp_map, tex_filepath = make_dispmap(tex_mesh, tex_resol, cache_dir, tag)
     except Exception as e:
         raise gr.Error(f'移位贴图计算失败：{e}')
     
     ## step - 3 apply disp map
-    progress(0, desc='正在生成网格细节')
+    # progress(0, desc='正在生成网格细节')
     trans_mesh = dm.DispMap.apply_dm(smt_mesh, disp_map)
     
     trans_meshpath = os.path.join(cache_dir, tag + '_trans.obj')
